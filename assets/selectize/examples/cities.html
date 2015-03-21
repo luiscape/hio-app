@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Selectize.js Demo</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/stylesheet.css">
+		<script src="js/jquery.js"></script>
+		<script src="../dist/js/standalone/selectize.js"></script>
+		<script src="js/index.js"></script>
+		<style type="text/css">
+		.selectize-control::before {
+			-moz-transition: opacity 0.2s;
+			-webkit-transition: opacity 0.2s;
+			transition: opacity 0.2s;
+			content: ' ';
+			z-index: 2;
+			position: absolute;
+			display: block;
+			top: 12px;
+			right: 34px;
+			width: 16px;
+			height: 16px;
+			background: url(images/spinner.gif);
+			background-size: 16px 16px;
+			opacity: 0;
+		}
+		.selectize-control.loading::before {
+			opacity: 0.4;
+		}
+		</style>
+	</head>
+    <body>
+		<div id="wrapper">
+			<h1>Selectize.js</h1>
+			<div class="demo">
+				<h2>State / City Selection</h2>
+				<p>A demonstration showing how to use the API to cascade controls for a classic state / city selector.</p>
+				<p><strong>Note:</strong> The API for fetching cities is a little spotty, so if it fails to list cities, that's the problem.</p>
+				<div class="control-group">
+					<label for="select-beast">State:</label>
+					<select id="select-state" placeholder="Pick a state...">
+						<option value="">Select a state...</option>
+						<option value="CHD.O.PRO.13.T6">Asylum seekers by Country of Origin</option>
+						<option value="CHD.O.FUN.19.T6">CAP Amount Received</option>
+					</select>
+					<label for="select-beast" style="margin-top:20px">City:</label>
+					<select id="select-city" placeholder="Pick a city..."></select>
+				</div>
+				<script>
+				var xhr;
+				var select_state, $select_state;
+				var select_city, $select_city;
+
+				$select_state = $('#select-state').selectize({
+					onChange: function(value) {
+						if (!value.length) return;
+						select_city.disable();
+						select_city.clearOptions();
+						select_city.load(function(callback) {
+							xhr && xhr.abort();
+							xhr = $.ajax({
+								url: 'http://localhost:8080/api/values/' + value,
+								success: function(results) {
+									select_city.enable();
+									callback(results);
+								},
+								error: function() {
+									callback();
+								}
+							})
+						});
+					}
+				});
+
+				$select_city = $('#select-city').selectize({
+					valueField: 'region',
+					labelField: 'region',
+					searchField: ['region']
+				});
+
+				select_city  = $select_city[0].selectize;
+				select_state = $select_state[0].selectize;
+
+				select_city.disable();
+				</script>
+			</div>
+		</div>
+	</body>
+</html>

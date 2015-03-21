@@ -1,159 +1,493 @@
 #!/bin/env node
-//  OpenShift sample Node application
-var express = require('express');
-var fs      = require('fs');
+
+// Loading dependencies.
+// Note: many libraries are merely experimental.
+// The ones maked with '*' are the essential ones for
+// the proper working of the application.
+var express = require('express'); // (*) call express
+var app = express(); // (*) define our app using express
+var bodyParser = require('body-parser');
+var chalk = require('chalk'); // for printing colorful logs
+var fs = require('fs'); // (*) use the file system
+var url = require('url');
+var request = require('request');
+var path = require('path');
+var Zip = require('adm-zip');
+var unzip = require('unzip');
+var http = require('http');
+var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
+var methodOverride = require('method-override');
+var parsecsv = require('csv-parser');
+var mongoose = require('mongoose');
+var cors = require('cors');
+
+// Loading configuration
+var c = require('./helper/loadconfig');
+var config = c.loadConfig("dev.json");
 
 
-/**
- *  Define the sample application.
- */
-var SampleApp = function() {
+//===============================//
+//_____ Express Configuration ___//
+//_______________________________//
 
-    //  Scope.
-    var self = this;
+app.use(cors()); // allowing CORS request
+app.use(bodyParser());
+app.use(bodyParser.json()); // parse application/json
+app.use(bodyParser.json({
+  type: 'application/vnd.api+json'
+})); // parse application/vnd.api+json as json
+app.use(bodyParser.urlencoded({
+  extended: true
+})); // parse application/x-www-form-urlencoded
+app.use(
+  methodOverride('X-HTTP-Method-Override')
+); // simulate DELETE/PUT
+
+app.use(require('morgan')('dev')); // for logging
+app.use(express.static(path.join(__dirname, 'assets'))); // serving static content
+app.use(express.static(path.join(__dirname, 'views'))); // serving static content
+
+// configuration for the port to use.
+// the first uses a local port. the second
+// uses a openshift environment variable
+// to determine what port to use.
+var port = process.env.PORT || 8000; // for local
+if (process.env.OPENSHIFT_NODEJS_PORT) { // for remote
+  var port = process.env.OPENSHIFT_NODEJS_PORT || 8000
+  var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+}
+
+// database connections.
+// the first variables determine the
+// local parameters to use.
+mongodb_connection_string = config.database.connection + config.database.name;
+
+// the second determine what paramenters
+// to use when deployed to openshift.
+// it uses a series of global variables
+// specific to openshift.
+if (process.env.OPENSHIFT_MONGODB_DB_HOST) {
+  mongodb_connection_string = 'mongodb://' +
+    process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+    process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+    process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+    parseInt(process.env.OPENSHIFT_MONGODB_DB_PORT) + '/' +
+    config.database.name;
+}
+
+// effectivelly connecting to mongodb
+// improve function:
+// - log errors
+// - log successes
+connectToDb = function() {
+  mongoose.connect(mongodb_connection_string);
+  c = mongoose.connection;
+  return (c)
+};
+
+var conn = connectToDb();
+
+// loading the shema models for the
+// different collections in the database
+var Indicator = require('./models/indicators');
+var Value = require('./models/values');
+var Source = require('./models/sources');
+var Locations = require('./models/locations');
+
+// Loading visualization functions
+// require('./viz/gaul.js')
 
 
-    /*  ================================================================  */
-    /*  Helper functions.                                                 */
-    /*  ================================================================  */
+// ROUTES
+// =============================================================================
+// This section configures the HTTP routes for the application.
+// The fist part determines global variables.
+// The second the specific routes to be used.
+var router = express.Router();
 
-    /**
-     *  Set up server IP address and port # using env variables/defaults.
-     */
-    self.setupVariables = function() {
-        //  Set the environment variables we need.
-        self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+// Log to use for all requests.
+router.use(function(req, res, next) {
+  console.log(chalk.blue('Activity:') + ' request made.');
+  next();
+});
 
-        if (typeof self.ipaddress === "undefined") {
-            //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
-            //  allows us to run/test the app locally.
-            console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
-            self.ipaddress = "127.0.0.1";
-        };
-    };
+// REFACTORING ======================================
+// TODO: parametrizing the application properly
+// configuring handling of parameters
+app.param('region', function(req, res, next, region) {
+  Value.find(region, function(err, user) {
+    if (err) return next(err);
 
+    req.region = region;
+    next();
+  });
+});
 
-    /**
-     *  Populate the cache.
-     */
-    self.populateCache = function() {
-        if (typeof self.zcache === "undefined") {
-            self.zcache = { 'index.html': '' };
-        }
+// INDEX
+router.get("/", function(req, res) {
+  res.sendfile("views/index.html");
+});
 
-        //  Local cache for static content.
-        self.zcache['index.html'] = fs.readFileSync('./index.html');
-    };
+// ADDING UI VIEWS
+router.get("/gaul", function(req, res) {
+  res.sendfile("views/gaul.html");
+});
 
+// ADDING UI VIEWS
+router.get("/indicators", function(req, res) {
+  res.sendfile("views/indicators.html");
+});
 
-    /**
-     *  Retrieve entry (content) from cache.
-     *  @param {string} key  Key identifying content to retrieve from cache.
-     */
-    self.cache_get = function(key) { return self.zcache[key]; };
+// this adds the functionality to import data
+// that is on a standard ZIP + CSV files.
+router.get("/ingest", function(req, res) {
+  res.sendfile("views/ingest.html");
+});
 
+// adding an ingestor
+// NOTE: needs to be refactored.
+router.route('/api/ingest').get(function(req, res) {
 
-    /**
-     *  terminator === the termination handler
-     *  Terminate server on receipt of the specified signal.
-     *  @param {string} sig  Signal to terminate on.
-     */
-    self.terminator = function(sig){
-        if (typeof sig === "string") {
-           console.log('%s: Received %s - terminating sample app ...',
-                       Date(Date.now()), sig);
-           process.exit(1);
-        }
-        console.log('%s: Node server stopped.', Date(Date.now()) );
-    };
+  // utils + variables
+  var DOWNLOAD_DIR = '/ingest/';
+  var download_url = String(req.param("file"));
 
-
-    /**
-     *  Setup termination handlers (for exit and a list of signals).
-     */
-    self.setupTerminationHandlers = function(){
-        //  Process on exit and signals.
-        process.on('exit', function() { self.terminator(); });
-
-        // Removed 'SIGPIPE' from the list - bugz 852598.
-        ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
-         'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
-        ].forEach(function(element, index, array) {
-            process.on(element, function() { self.terminator(element); });
+  // function to store the file in a mongodb db
+  function storeIndicator(file_name) {
+    // function to parse local csv files into JSON objects here
+    console.log('storing file')
+    var store = fs.createReadStream(__dirname + DOWNLOAD_DIR + file_name)
+      .pipe(parsecsv())
+      .on('data', function(data) {
+        console.log('Storing ' + data.indID);
+        //mongoose.model('indicators').insert(data);
+        var indicator = new Indicator();
+        indicator.indID = data.indID;
+        indicator.name = data.name;
+        indicator.unit = data.unit;
+        indicator.save(function(err) {
+          if (err) {
+            res.json({
+              success: false,
+              message: err
+            });
+          }
+          res.json({
+            success: true,
+            message: 'Indicators created successfully!'
+          });
         });
-    };
+      });
+  };
 
-
-    /*  ================================================================  */
-    /*  App server functions (main app logic here).                       */
-    /*  ================================================================  */
-
-    /**
-     *  Create the routing table entries + handlers for the application.
-     */
-    self.createRoutes = function() {
-        self.routes = { };
-
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
-
-        self.routes['/'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
-        };
-    };
-
-
-    /**
-     *  Initialize the server (express) and create the routes and register
-     *  the handlers.
-     */
-    self.initializeServer = function() {
-        self.createRoutes();
-        self.app = express.createServer();
-
-        //  Add handlers for the app (from the routes).
-        for (var r in self.routes) {
-            self.app.get(r, self.routes[r]);
-        }
-    };
-
-
-    /**
-     *  Initializes the sample application.
-     */
-    self.initialize = function() {
-        self.setupVariables();
-        self.populateCache();
-        self.setupTerminationHandlers();
-
-        // Create the express server and routes.
-        self.initializeServer();
-    };
-
-
-    /**
-     *  Start the server (starts up the sample application).
-     */
-    self.start = function() {
-        //  Start the app on the specific interface (and port).
-        self.app.listen(self.port, self.ipaddress, function() {
-            console.log('%s: Node server started on %s:%d ...',
-                        Date(Date.now() ), self.ipaddress, self.port);
+  // function to store the file in a mongodb db
+  function storeDataset(file_name) {
+    // function to parse local csv files into JSON objects here
+    console.log('storing file')
+    var store = fs.createReadStream(__dirname + DOWNLOAD_DIR + file_name)
+      .pipe(parsecsv())
+      .on('data', function(data) {
+        console.log('Storing ' + data.dsID);
+        //mongoose.model('indicators').insert(data);
+        var dataset = new Source();
+        dataset.dsID = data.dsID;
+        dataset.name = data.name;
+        dataset.last_updated = data.last_updated;
+        dataset.last_scraped = data.last_scraped;
+        dataset.save(function(err) {
+          if (err)
+            res.send(err);
+          res.json({
+            message: 'Dataset created successfully!'
+          });
         });
+      });
+  };
+
+  // function to store the file in a mongodb db
+  function storeValue(file_name) {
+    // function to parse local csv files into JSON objects here
+    console.log('storing file')
+    var store = fs.createReadStream(__dirname + DOWNLOAD_DIR + file_name)
+      .pipe(parsecsv())
+      .on('data', function(data) {
+        console.log('Storing ...');
+        //mongoose.model('indicators').insert(data);
+        var value = new Value();
+        value.dsID = data.dsID;
+        value.region = data.region;
+        value.indID = data.indID;
+        value.timeReference = data.timeReference;
+        value.value = data.value;
+        value.is_number = data.is_number;
+        value.source = data.source;
+        value.save(function(err) {
+          if (err)
+            res.send(err);
+          res.json({
+            message: 'Values created successfully!'
+          });
+        });
+      });
+  };
+
+  function uncompressFile(file) {
+    // reading archives
+    console.log('uncompressing');
+    fs.createReadStream(__dirname + DOWNLOAD_DIR + file)
+      .pipe(unzip.Extract({
+        path: __dirname + DOWNLOAD_DIR
+      }))
+      .on('close', function(csv_name) {
+        console.log('Successfully extracted the files'); // this part isn't working
+        var csv_indicator = 'data/indicator.csv';
+        var csv_dataset = 'data/dataset.csv';
+        var csv_value = 'data/value.csv';
+        storeIndicator(csv_indicator);
+        storeDataset(csv_dataset);
+        storeValue(csv_value);
+      });
+  };
+
+  function downloadFile(file_url, callback) {
+    console.log('downloading file');
+
+    // create db logging middleware
+    console.log('This is the URL being fetched:', file_url);
+
+    var file_name = url.parse(file_url).pathname.split('/').pop();
+    var file = fs.createWriteStream(__dirname + DOWNLOAD_DIR + file_name);
+
+    var options = {
+      host: url.parse(file_url).host,
+      port: 80,
+      path: url.parse(file_url).pathname
     };
 
-};   /*  Sample Application.  */
+    http.get(options, function(res) {
+      res.on('data', function(data) {
+        file.write(data);
+      }).on('end', function() {
+        file.end();
+        console.log(file_name + ' successfully downloaded to ' + DOWNLOAD_DIR);
+        uncompressFile(file_name);
+      });
+    });
+  };
+
+  // triggering functions
+  downloadFile(download_url);
+
+});
+
+// ADDING API ROUTES
+// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+// load from config.json
+// QUESTION: how to load local json file with server.js (config.json)
+router.get('/api', function(req, res) {
+  res.json({
+    help: "Prototype of an analytical API for the analysis of high frequency humanitarian information.",
+    version_name: config.version_name,
+    version: config.version,
+    repository: 'https://github.com/luiscape/xanadu-app',
+    base_query: {
+      locations: "api/locations"
+    }
+  });
+});
+
+// metadata for locations
+router.route('/api/locations/adm0')
+  .get(
+    function(req, res) {
+      Locations.count({
+          'properties.ADM0_CODE': {
+            $exists: true
+          },
+          'properties.ADM1_CODE': {
+            $exists: false
+          }
+        },
+        function(err, total) {
+          Locations.find({
+              'properties.ADM0_CODE': {
+                $exists: true
+              },
+              'properties.ADM1_CODE': {
+                $exists: false
+              }
+            }, {
+              'properties.ADM0_CODE': 1,
+              'properties.ADM0_NAME': 1
+            },
+            function(err, values) {
+              if (err) console.log("You've got an error counting my friend");
+              else res.json({
+                success: true,
+                help: "Returning the metadata for the Admin 0 administrative boundaries.",
+                count: total,
+                locations: values
+              });
+            });
+
+        });
+    });
 
 
+// debugging locations
+router.route('/api/locations').get(
+  function(req, res) {
+    Locations.count({}, function(err, total) {
+      if (err) console.log("You've got an error counting my friend");
 
-/**
- *  main():  Main code.
- */
-var zapp = new SampleApp();
-zapp.initialize();
-zapp.start();
 
+      if (req.param("ADM0_CODE") && req.param("ADM1_CODE") && req.param("ADM2_CODE")) {
+        Locations.find({
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': req.param("ADM1_CODE"),
+          'properties.ADM2_CODE': req.param("ADM2_CODE")
+        }, function(err, values) {
+          Locations.count({
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': req.param("ADM1_CODE"),
+            'properties.ADM2_CODE': req.param("ADM2_CODE")
+          }, function(err, total) {;
+            if (err) console.log("You've got an error counting my friend");
+            else res.json({
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else if (req.param("ADM0_CODE") && req.param("ADM1_CODE")) {
+        Locations.find({
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': req.param("ADM1_CODE"),
+          'properties.ADM2_CODE': {
+            $exists: false
+          }
+        }, function(err, values) {
+          Locations.count({
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': req.param("ADM1_CODE"),
+            'properties.ADM2_CODE': {
+              $exists: false
+            }
+          }, function(err, total) {;
+            if (err) console.log("You've got an error counting my friend");
+            else res.json({
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else if (req.param("ADM2_CODE")) {
+        Locations.find({
+          'properties.ADM2_CODE': req.param("ADM2_CODE")
+        }, function(err, values) {
+          Locations.count({
+            'properties.ADM2_CODE': req.param("ADM2_CODE")
+          }, function(err, total) {;
+            if (err) console.log("You've got an error counting my friend");
+            else res.json({
+              success: true,
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else if (req.param("ADM1_CODE")) {
+        Locations.find({
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': {
+            $exists: false
+          },
+          'properties.ADM2_CODE': {
+            $exists: false
+          }
+        }, function(err, values) {
+          Locations.count({
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': {
+              $exists: false
+            },
+            'properties.ADM2_CODE': {
+              $exists: false
+            }
+          }, function(err, total) {;
+            if (err) console.log("You've got an error counting my friend");
+            else res.json({
+              success: true,
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else if (req.param("ADM0_CODE")) {
+        Locations.find({
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': {
+            $exists: false
+          },
+          'properties.ADM2_CODE': {
+            $exists: false
+          }
+        }, function(err, values) {
+          Locations.count({
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': {
+              $exists: false
+            },
+            'properties.ADM2_CODE': {
+              $exists: false
+            }
+          }, function(err, total) {;
+            if (err) console.log("You've got an error counting my friend");
+            else res.json({
+              success: true,
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else res.json({
+        help: "Result of entities found.",
+        count: total
+      });
+    });
+  });
+
+// =================== //
+// REGISTER OUR ROUTES //
+// =================== //
+// All routes will be prefixed with `/api`
+app.use('/', router);
+
+// ================ //
+// START THE SERVER //
+// ================ //
+app.listen(port, server_ip_address, function() {
+
+  // General server information
+  version = config.version;
+  version_name = config.version_name;
+  github = config.github;
+  console.log('\n');
+  console.log(chalk.blue.underline.bold('SERVER INFORMATION:'));
+  console.log(chalk.yellow('Version: ') + version + " " + chalk.red(version_name));
+  console.log(chalk.yellow('GitHub URL: ') + config.github);
+  console.log(chalk.yellow('Author: ') + chalk.green(config.author));
+  console.log(chalk.yellow('MongoDB connection: ') + mongodb_connection_string);
+  // console.log(chalk.tellow('Connection: ') + );
+  console.log(chalk.yellow('Port: ') + port);
+
+  // Start logging below
+  console.log('\n');
+  console.log(chalk.red.underline.bold('LOG:'));
+});

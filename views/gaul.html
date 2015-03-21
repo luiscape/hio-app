@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css/framework.css" />
+    <link rel="stylesheet" type="text/css" href="css/component.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/animate.css" />
+    <style>
+    .boundary {
+        fill: none;
+        stroke: #2c3e50;
+        stroke-width: 1.5;
+        /* stroke-dasharray: 2,2;
+      stroke-linejoin: round; */
+    }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div class="top-bar"></div>
+    <div class="container">
+        <div class="row">
+            <div class="seven columns" style="padding-top: 100px; padding-left: 50px;">
+                <h2 id="entity-name"></h2>
+            </div>
+        </div>
+
+        <div class="row" style="position:fixed;">
+            <div class="five columns" id="text">
+                <div style="padding-top: 200px; padding-left: 50px;">
+                    <p>Drawing boundaries</p>
+                    <form class="input input--isao" name="GaulSearchForm">
+                        <input type="text" id="formValueId" name="valueId" class="input__field input__field--isao" />
+                        <label class="input__label input__label--isao" for="input-39" data-content="Entity Code">
+                            <span class="input__label-content input__label-content--isao">Entity Code</span>
+                        </label>
+                        <input type="text" style="display:none;" />
+                        <select id="adm_codes_input" onChange="OnDropDownChange(this);"></select>
+                        <a href="javascript:void(0);" id="country_lookup" class="button" style="display:none;">Search</a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <section class="footnote">
+            <p>
+                Select from <strong><span id="boundary-count"></span></strong></span></span> boundaries to draw.
+            </p>
+
+            <p>
+                <i>Credit:</i> FAO GAUL boundary set.
+            </p>
+        </section>
+
+
+        <script>
+        function submitForm() {
+            drawGaulBoundary(document.getElementById("formValueId").value);
+            Pace.restart();
+        };
+        document.onkeydown = function() {
+            if (window.event.keyCode == '13') {
+                submitForm();
+            }
+        }
+        document.getElementById("country_lookup").onclick = submitForm;
+
+        function OnDropDownChange(dropDown) {
+            var selectedValue = dropDown.options[dropDown.selectedIndex].value;
+            document.getElementById("formValueId").value = selectedValue;
+        }
+        </script>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/pace.min.js"></script>
+    <script type="text/javascript" src="js/vendor/data_collection.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="viz/gaul.js"></script>
+    <script src="viz/metadata.js"></script>
+
+</body>

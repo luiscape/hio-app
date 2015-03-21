@@ -1,0 +1,12 @@
+{
+	"version": "0.0.1",
+	"version_name":"Liberia",
+	"github": null,
+	"public": true,
+	"author": "@luiscape",
+	"author_email": "luiscape@gmail.com",
+	"database": {
+		"name": "xanadu",
+    "connection": "mongodb://127.0.0.1:27017/"
+	}
+}

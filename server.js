@@ -23,7 +23,7 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 
 // Loading configuration
-var c = require('./helper/loadconfig');
+var c = require('./config/loadconfig');
 var config = c.loadConfig("dev.json");
 
 

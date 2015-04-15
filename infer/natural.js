@@ -23,8 +23,8 @@ var natural = require('natural'),
 // classifier.train();
 
 natural.BayesClassifier.load('classifier.json', null, function(err, classifier) {
-    console.log(classifier.classify('how much money do they need?'));
-	console.log(classifier.getClassifications('how much money do they need?'));
+    // console.log(classifier.classify('how much money do they need?'));
+	console.log(classifier.getClassifications('how many refugees are in Syria today?'));
 });
 
 

@@ -1,0 +1,55 @@
+2015-04-14T22:25:04.452776000 0.632724s notice: Recursively removing directory /Users/luis/Documents/Programming/xanadu/xanadu-app/rethinkdb_data/tmp
+2015-04-14T22:25:04.454749000 0.634702s notice: Initializing directory /Users/luis/Documents/Programming/xanadu/xanadu-app/rethinkdb_data
+2015-04-14T22:25:04.454882000 0.634829s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/Users/luis/Documents/Programming/xanadu/xanadu-app/rethinkdb_data' did not already exist or is empty.)
+2015-04-14T22:25:04.454913000 0.634861s notice: Running rethinkdb 2.0.0-1 (CLANG 4.2 (clang-425.0.28))...
+2015-04-14T22:25:04.468411000 0.648359s notice: Running on Darwin 14.1.0 x86_64
+2015-04-14T22:25:04.468475000 0.648422s notice: Loading data from directory /Users/luis/Documents/Programming/xanadu/xanadu-app/rethinkdb_data
+2015-04-14T22:25:04.802740000 0.982687s info: Automatically using cache size of 100 MB
+2015-04-14T22:25:04.802750000 0.982697s warn: Cache size does not leave much memory for server and query overhead (available memory: 574 MB).
+2015-04-14T22:25:04.802759000 0.982705s warn: Cache size is very low and may impact performance.
+2015-04-14T22:25:04.805322000 0.985269s notice: Listening for intracluster connections on port 29015
+2015-04-14T22:25:04.806608000 0.986555s notice: Listening for client driver connections on port 28015
+2015-04-14T22:25:04.806717000 0.986664s notice: Listening for administrative HTTP connections on port 8080
+2015-04-14T22:25:04.806744000 0.986691s notice: Listening on addresses: 127.0.0.1, ::1
+2015-04-14T22:25:04.806751000 0.986697s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2015-04-14T22:25:04.806755000 0.986702s notice: Server ready, "Luiss_MacBook_Air_local_uu2" 4c31cbf6-2500-4f0d-9733-f50a109b3fe0
+2015-04-15T00:49:31.237630000 8668.352453s notice: Server got SIGINT from pid 76790, uid 501; shutting down...
+2015-04-15T00:49:31.239158000 8668.353981s notice: Shutting down client connections...
+2015-04-15T00:49:31.240272000 8668.355095s notice: All client connections closed.
+2015-04-15T00:49:31.240278000 8668.355101s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2015-04-15T00:49:31.260168000 8668.374991s notice: Storage engine shut down.
+2015-04-15T00:49:42.506828000 0.616113s notice: Running rethinkdb 2.0.0-1 (CLANG 4.2 (clang-425.0.28))...
+2015-04-15T00:49:42.526989000 0.636279s notice: Running on Darwin 14.1.0 x86_64
+2015-04-15T00:49:42.527051000 0.636330s notice: Loading data from directory /Users/luis/Documents/Programming/xanadu/xanadu-app/rethinkdb_data
+2015-04-15T00:49:42.612502000 0.721781s info: Automatically using cache size of 100 MB
+2015-04-15T00:49:42.612514000 0.721792s warn: Cache size does not leave much memory for server and query overhead (available memory: 106 MB).
+2015-04-15T00:49:42.612520000 0.721798s warn: Cache size is very low and may impact performance.
+2015-04-15T00:49:42.613165000 0.722444s notice: Listening for intracluster connections on port 29015
+2015-04-15T00:49:42.614601000 0.723880s notice: Listening for client driver connections on port 28015
+2015-04-15T00:49:42.614721000 0.724000s notice: Listening for administrative HTTP connections on port 8080
+2015-04-15T00:49:42.614731000 0.724010s notice: Listening on addresses: 127.0.0.1, ::1
+2015-04-15T00:49:42.614736000 0.724015s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2015-04-15T00:49:42.614741000 0.724019s notice: Server ready, "Luiss_MacBook_Air_local_uu2" 4c31cbf6-2500-4f0d-9733-f50a109b3fe0
+2015-04-15T00:54:58.460787000 316.575758s notice: Removing file /Users/luis/Documents/Programming/xanadu/xanadu-app/rethinkdb_data/fd5ade33-59da-416d-8580-d0cac448cd2c
+2015-04-15T01:23:32.399699000 2030.545615s notice: Server got SIGINT from pid 76790, uid 501; shutting down...
+2015-04-15T01:23:32.399902000 2030.545817s notice: Shutting down client connections...
+2015-04-15T01:23:32.400062000 2030.545977s notice: All client connections closed.
+2015-04-15T01:23:32.400072000 2030.545987s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2015-04-15T01:23:32.409367000 2030.555283s notice: Storage engine shut down.
+2015-04-15T01:23:44.771140000 0.603231s notice: Running rethinkdb 2.0.0-1 (CLANG 4.2 (clang-425.0.28))...
+2015-04-15T01:23:44.783075000 0.615171s notice: Running on Darwin 14.1.0 x86_64
+2015-04-15T01:23:44.783139000 0.615225s notice: Loading data from directory /Users/luis/Documents/Programming/xanadu/xanadu-app/rethinkdb_data
+2015-04-15T01:23:44.843835000 0.675921s info: Automatically using cache size of 100 MB
+2015-04-15T01:23:44.843843000 0.675929s warn: Cache size does not leave much memory for server and query overhead (available memory: 132 MB).
+2015-04-15T01:23:44.843847000 0.675933s warn: Cache size is very low and may impact performance.
+2015-04-15T01:23:44.844463000 0.676549s notice: Listening for intracluster connections on port 29015
+2015-04-15T01:23:44.845386000 0.677472s notice: Listening for client driver connections on port 28015
+2015-04-15T01:23:44.845511000 0.677596s notice: Listening for administrative HTTP connections on port 8080
+2015-04-15T01:23:44.845512000 0.677598s notice: Listening on addresses: 127.0.0.1, ::1
+2015-04-15T01:23:44.845515000 0.677601s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2015-04-15T01:23:44.845516000 0.677602s notice: Server ready, "Luiss_MacBook_Air_local_uu2" 4c31cbf6-2500-4f0d-9733-f50a109b3fe0
+2015-04-15T01:23:50.975069000 6.807277s notice: Server got SIGINT from pid 76790, uid 501; shutting down...
+2015-04-15T01:23:50.975249000 6.807457s notice: Shutting down client connections...
+2015-04-15T01:23:50.975521000 6.807728s notice: All client connections closed.
+2015-04-15T01:23:50.975555000 6.807762s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2015-04-15T01:23:50.983437000 6.815645s notice: Storage engine shut down.

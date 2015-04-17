@@ -1,12 +1,12 @@
-language: node_js
 sudo: required
+language: node_js
 node_js:
   - "0.12"
   - "0.11"
   - "0.10"
 
 install:
- - sudo npm install -g istanbul
+ - npm install istanbul
 
 # run tests + coverage
 script:

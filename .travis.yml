@@ -1,8 +1,12 @@
 language: node_js
+sudp: required
 node_js:
   - "0.12"
   - "0.11"
   - "0.10"
+
+install:
+ - sudo npm install -g istanbul
 
 # run tests + coverage
 script:

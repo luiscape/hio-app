@@ -5,7 +5,7 @@
 
 var r            = require('rethinkdb');
 var path         = require('path');
-var LoadConfig   = require('./LoadConfig.js');
+var LoadConfig   = require(path.join(__dirname, 'LoadConfig.js'));
 
 
 /* Application */

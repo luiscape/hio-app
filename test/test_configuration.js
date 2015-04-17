@@ -16,7 +16,7 @@ var supertest = require('supertest');
 
 /* Application */
 
-var C         = require('../config');
+var C         = require(path.join(process.cwd(), 'config'));
 var _         = require('underscore');
 var config    = C.LoadConfig('dev');
 

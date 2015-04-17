@@ -3,10 +3,9 @@ SF:/Users/luis/Documents/Programming/hio/hio-app/config/index.js
 FNF:0
 FNH:0
 DA:6,1
-DA:7,1
 DA:8,1
-LF:3
-LH:3
+LF:2
+LH:2
 BRF:0
 BRH:0
 end_of_record
@@ -52,6 +51,7 @@ FNDA:4,(anonymous_1)
 DA:7,1
 DA:8,1
 DA:9,1
+DA:11,1
 DA:12,1
 DA:15,4
 DA:16,4
@@ -63,8 +63,8 @@ DA:25,4
 DA:26,4
 DA:28,4
 DA:29,4
-LF:14
-LH:12
+LF:15
+LH:13
 BRDA:15,1,0,4
 BRDA:15,1,1,0
 BRDA:16,2,0,0

@@ -8,7 +8,7 @@ var fs      = require('fs');
 var path    = require('path');
 var chalk   = require('chalk');
 
-
+console.log('**** Config dir should be: ' + __dirname);
 module.exports =  function(config_name, verbose) {
 
   /* default parameter value */

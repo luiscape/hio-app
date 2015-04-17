@@ -6,6 +6,7 @@ node_js:
   - "0.10"
 
 install:
+ - npm install
  - npm install istanbul
 
 # run tests + coverage

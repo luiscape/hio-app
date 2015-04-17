@@ -24,12 +24,15 @@
     "node-zip": "^1.1.0",
     "nprogress": "^0.1.6",
     "request": "^2.40.0",
+    "requireindex": "^1.1.0",
     "restify": "^1.4.4",
     "rethinkdb": "^2.0.0",
     "topojson": "^1.6.18",
+    "underscore": "^1.8.3",
     "unzip": "^0.1.9"
   },
   "devDependencies": {
+    "chai": "^2.2.0",
     "mocha": "^2.2.4",
     "should": "^5.2.0",
     "supertest": "^0.15.0"

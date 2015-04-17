@@ -24,8 +24,8 @@ var cors = require('cors');
 var r = require('rethinkdb');
 
 // Loading configuration
-var c = require('./config/loadconfig');
-var config = c.loadConfig("dev.json");
+var c = require('./config/LoadConfig');
+var config = c.LoadConfig("dev.json");
 
 
 //===============================//

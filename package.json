@@ -27,12 +27,15 @@
     "requireindex": "^1.1.0",
     "restify": "^1.4.4",
     "rethinkdb": "^2.0.0",
+    "should": "^6.0.1",
+    "should-type": "0.0.4",
     "topojson": "^1.6.18",
     "underscore": "^1.8.3",
     "unzip": "^0.1.9"
   },
   "devDependencies": {
     "chai": "^2.2.0",
+    "coveralls": "^2.11.2",
     "mocha": "^2.2.4",
     "should": "^5.2.0",
     "supertest": "^0.15.0"

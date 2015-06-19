@@ -1,0 +1,1494 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for hio-app/server.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../prettify.css">
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">hio-app/server.js</span></h1>
+    <h2>
+        Statements: <span class="metric">21.69% <small>(41 / 189)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">6.38% <small>(3 / 47)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">2.38% <small>(1 / 42)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">22.78% <small>(41 / 180)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">hio-app/</a> &#187; server.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">#!/bin/env node
+&nbsp;
+// Loading dependencies.
+// Note: many libraries are merely experimental.
+// The ones maked with '*' are the essential ones for
+// the proper working of the application.
+var express = require('express'); // (*) call express
+var app = express(); // (*) define our app using express
+var bodyParser = require('body-parser');
+var chalk = require('chalk'); // for printing colorful logs
+var fs = require('fs'); // (*) use the file system
+var url = require('url');
+var request = require('request');
+var path = require('path');
+var Zip = require('adm-zip');
+var unzip = require('unzip');
+var http = require('http');
+var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
+var methodOverride = require('method-override');
+var parsecsv = require('csv-parser');
+var mongoose = require('mongoose');
+var cors = require('cors');
+var r = require('rethinkdb');
+&nbsp;
+// Loading configuration
+var c = require('./config/LoadConfig');
+var config = c.LoadConfig("dev.json");
+&nbsp;
+&nbsp;
+//===============================//
+//_____ Express Configuration ___//
+//_______________________________//
+&nbsp;
+app.use(cors()); // allowing CORS request
+app.use(bodyParser());
+app.use(bodyParser.json()); // parse application/json
+app.use(bodyParser.json({
+  type: 'application/vnd.api+json'
+})); // parse application/vnd.api+json as json
+app.use(bodyParser.urlencoded({
+  extended: true
+})); // parse application/x-www-form-urlencoded
+app.use(
+  methodOverride('X-HTTP-Method-Override')
+); // simulate DELETE/PUT
+&nbsp;
+app.use(require('morgan')('dev')); // for logging
+app.use(express.static(path.join(__dirname, 'assets'))); // serving static content
+app.use(express.static(path.join(__dirname, 'views'))); // serving static content
+&nbsp;
+// configuration for the port to use.
+// the first uses a local port. the second
+// uses a openshift environment variable
+// to determine what port to use.
+var port = process.env.PORT || 8000; // for local
+<span class="missing-if-branch" title="if path not taken" >I</span>if (process.env.OPENSHIFT_NODEJS_PORT) { // for remote
+<span class="cstat-no" title="statement not covered" >  var port = process.env.OPENSHIFT_NODEJS_PORT || 8000</span>
+<span class="cstat-no" title="statement not covered" >  var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'</span>
+}
+&nbsp;
+// connect to rethinkdb
+var connection = null;
+r.connect({ host: 'localhost', port: 28015 }, <span class="fstat-no" title="function not covered" >function(err, conn) {</span>
+<span class="cstat-no" title="statement not covered" >    if (err) <span class="cstat-no" title="statement not covered" >throw err;</span></span>
+<span class="cstat-no" title="statement not covered" >    connection = conn;</span>
+})
+&nbsp;
+// effectivelly connecting to mongodb
+// improve function:
+// - log errors
+// - log successes
+connectToDb = function() {
+  mongoose.connect(mongodb_connection_string);
+<span class="cstat-no" title="statement not covered" >  c = mongoose.connection;</span>
+<span class="cstat-no" title="statement not covered" >  return (c)</span>
+};
+&nbsp;
+var conn = connectToDb();
+&nbsp;
+// loading the shema models for the
+// different collections in the database
+<span class="cstat-no" title="statement not covered" >var Indicator = require('./models/indicators');</span>
+<span class="cstat-no" title="statement not covered" >var Value = require('./models/values');</span>
+<span class="cstat-no" title="statement not covered" >var Source = require('./models/sources');</span>
+<span class="cstat-no" title="statement not covered" >var Locations = require('./models/locations');</span>
+&nbsp;
+// Loading visualization functions
+// require('./viz/gaul.js')
+&nbsp;
+&nbsp;
+// ROUTES
+// =============================================================================
+// This section configures the HTTP routes for the application.
+// The fist part determines global variables.
+// The second the specific routes to be used.
+<span class="cstat-no" title="statement not covered" >var router = express.Router();</span>
+&nbsp;
+// Log to use for all requests.
+<span class="cstat-no" title="statement not covered" >router.use(<span class="fstat-no" title="function not covered" >function(req, res, next) {</span></span>
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.blue('Activity:') + ' request made.');</span>
+<span class="cstat-no" title="statement not covered" >  next();</span>
+});
+&nbsp;
+// REFACTORING ======================================
+// TODO: parametrizing the application properly
+// configuring handling of parameters
+<span class="cstat-no" title="statement not covered" >app.param('region', <span class="fstat-no" title="function not covered" >function(req, res, next, region) {</span></span>
+<span class="cstat-no" title="statement not covered" >  Value.find(region, <span class="fstat-no" title="function not covered" >function(err, user) {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (err) <span class="cstat-no" title="statement not covered" >return next(err);</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    req.region = region;</span>
+<span class="cstat-no" title="statement not covered" >    next();</span>
+  });
+});
+&nbsp;
+// INDEX
+<span class="cstat-no" title="statement not covered" >router.get("/", <span class="fstat-no" title="function not covered" >function(req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >  res.sendfile("views/index.html");</span>
+});
+&nbsp;
+// ADDING UI VIEWS
+<span class="cstat-no" title="statement not covered" >router.get("/gaul", <span class="fstat-no" title="function not covered" >function(req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >  res.sendfile("views/gaul.html");</span>
+});
+&nbsp;
+// ADDING UI VIEWS
+<span class="cstat-no" title="statement not covered" >router.get("/indicators", <span class="fstat-no" title="function not covered" >function(req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >  res.sendfile("views/indicators.html");</span>
+});
+&nbsp;
+// this adds the functionality to import data
+// that is on a standard ZIP + CSV files.
+<span class="cstat-no" title="statement not covered" >router.get("/ingest", <span class="fstat-no" title="function not covered" >function(req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >  res.sendfile("views/ingest.html");</span>
+});
+&nbsp;
+// adding an ingestor
+// NOTE: needs to be refactored.
+<span class="cstat-no" title="statement not covered" >router.route('/api/ingest').get(<span class="fstat-no" title="function not covered" >function(req, res) {</span></span>
+&nbsp;
+  // utils + variables
+<span class="cstat-no" title="statement not covered" >  var DOWNLOAD_DIR = '/ingest/';</span>
+<span class="cstat-no" title="statement not covered" >  var download_url = String(req.param("file"));</span>
+&nbsp;
+  // function to store the file in a mongodb db
+<span class="fstat-no" title="function not covered" >  function storeIndicator(file_name) {</span>
+    // function to parse local csv files into JSON objects here
+<span class="cstat-no" title="statement not covered" >    console.log('storing file')</span>
+<span class="cstat-no" title="statement not covered" >    var store = fs.createReadStream(__dirname + DOWNLOAD_DIR + file_name)</span>
+      .pipe(parsecsv())
+      .on('data', <span class="fstat-no" title="function not covered" >function(data) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log('Storing ' + data.indID);</span>
+        //mongoose.model('indicators').insert(data);
+<span class="cstat-no" title="statement not covered" >        var indicator = new Indicator();</span>
+<span class="cstat-no" title="statement not covered" >        indicator.indID = data.indID;</span>
+<span class="cstat-no" title="statement not covered" >        indicator.name = data.name;</span>
+<span class="cstat-no" title="statement not covered" >        indicator.unit = data.unit;</span>
+<span class="cstat-no" title="statement not covered" >        indicator.save(<span class="fstat-no" title="function not covered" >function(err) {</span></span>
+<span class="cstat-no" title="statement not covered" >          if (err) {</span>
+<span class="cstat-no" title="statement not covered" >            res.json({</span>
+              success: false,
+              message: err
+            });
+          }
+<span class="cstat-no" title="statement not covered" >          res.json({</span>
+            success: true,
+            message: 'Indicators created successfully!'
+          });
+        });
+      });
+  };
+&nbsp;
+  // function to store the file in a mongodb db
+<span class="fstat-no" title="function not covered" >  function storeDataset(file_name) {</span>
+    // function to parse local csv files into JSON objects here
+<span class="cstat-no" title="statement not covered" >    console.log('storing file')</span>
+<span class="cstat-no" title="statement not covered" >    var store = fs.createReadStream(__dirname + DOWNLOAD_DIR + file_name)</span>
+      .pipe(parsecsv())
+      .on('data', <span class="fstat-no" title="function not covered" >function(data) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log('Storing ' + data.dsID);</span>
+        //mongoose.model('indicators').insert(data);
+<span class="cstat-no" title="statement not covered" >        var dataset = new Source();</span>
+<span class="cstat-no" title="statement not covered" >        dataset.dsID = data.dsID;</span>
+<span class="cstat-no" title="statement not covered" >        dataset.name = data.name;</span>
+<span class="cstat-no" title="statement not covered" >        dataset.last_updated = data.last_updated;</span>
+<span class="cstat-no" title="statement not covered" >        dataset.last_scraped = data.last_scraped;</span>
+<span class="cstat-no" title="statement not covered" >        dataset.save(<span class="fstat-no" title="function not covered" >function(err) {</span></span>
+<span class="cstat-no" title="statement not covered" >          if (err)</span>
+<span class="cstat-no" title="statement not covered" >            res.send(err);</span>
+<span class="cstat-no" title="statement not covered" >          res.json({</span>
+            message: 'Dataset created successfully!'
+          });
+        });
+      });
+  };
+&nbsp;
+  // function to store the file in a mongodb db
+<span class="fstat-no" title="function not covered" >  function storeValue(file_name) {</span>
+    // function to parse local csv files into JSON objects here
+<span class="cstat-no" title="statement not covered" >    console.log('storing file')</span>
+<span class="cstat-no" title="statement not covered" >    var store = fs.createReadStream(__dirname + DOWNLOAD_DIR + file_name)</span>
+      .pipe(parsecsv())
+      .on('data', <span class="fstat-no" title="function not covered" >function(data) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log('Storing ...');</span>
+        //mongoose.model('indicators').insert(data);
+<span class="cstat-no" title="statement not covered" >        var value = new Value();</span>
+<span class="cstat-no" title="statement not covered" >        value.dsID = data.dsID;</span>
+<span class="cstat-no" title="statement not covered" >        value.region = data.region;</span>
+<span class="cstat-no" title="statement not covered" >        value.indID = data.indID;</span>
+<span class="cstat-no" title="statement not covered" >        value.timeReference = data.timeReference;</span>
+<span class="cstat-no" title="statement not covered" >        value.value = data.value;</span>
+<span class="cstat-no" title="statement not covered" >        value.is_number = data.is_number;</span>
+<span class="cstat-no" title="statement not covered" >        value.source = data.source;</span>
+<span class="cstat-no" title="statement not covered" >        value.save(<span class="fstat-no" title="function not covered" >function(err) {</span></span>
+<span class="cstat-no" title="statement not covered" >          if (err)</span>
+<span class="cstat-no" title="statement not covered" >            res.send(err);</span>
+<span class="cstat-no" title="statement not covered" >          res.json({</span>
+            message: 'Values created successfully!'
+          });
+        });
+      });
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function uncompressFile(file) {</span>
+    // reading archives
+<span class="cstat-no" title="statement not covered" >    console.log('uncompressing');</span>
+<span class="cstat-no" title="statement not covered" >    fs.createReadStream(__dirname + DOWNLOAD_DIR + file)</span>
+      .pipe(unzip.Extract({
+        path: __dirname + DOWNLOAD_DIR
+      }))
+      .on('close', <span class="fstat-no" title="function not covered" >function(csv_name) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log('Successfully extracted the files'); </span>// this part isn't working
+<span class="cstat-no" title="statement not covered" >        var csv_indicator = 'data/indicator.csv';</span>
+<span class="cstat-no" title="statement not covered" >        var csv_dataset = 'data/dataset.csv';</span>
+<span class="cstat-no" title="statement not covered" >        var csv_value = 'data/value.csv';</span>
+<span class="cstat-no" title="statement not covered" >        storeIndicator(csv_indicator);</span>
+<span class="cstat-no" title="statement not covered" >        storeDataset(csv_dataset);</span>
+<span class="cstat-no" title="statement not covered" >        storeValue(csv_value);</span>
+      });
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function downloadFile(file_url, callback) {</span>
+<span class="cstat-no" title="statement not covered" >    console.log('downloading file');</span>
+&nbsp;
+    // create db logging middleware
+<span class="cstat-no" title="statement not covered" >    console.log('This is the URL being fetched:', file_url);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var file_name = url.parse(file_url).pathname.split('/').pop();</span>
+<span class="cstat-no" title="statement not covered" >    var file = fs.createWriteStream(__dirname + DOWNLOAD_DIR + file_name);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var options = {</span>
+      host: url.parse(file_url).host,
+      port: 80,
+      path: url.parse(file_url).pathname
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    http.get(options, <span class="fstat-no" title="function not covered" >function(res) {</span></span>
+<span class="cstat-no" title="statement not covered" >      res.on('data', <span class="fstat-no" title="function not covered" >function(data) {</span></span>
+<span class="cstat-no" title="statement not covered" >        file.write(data);</span>
+      }).on('end', <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >        file.end();</span>
+<span class="cstat-no" title="statement not covered" >        console.log(file_name + ' successfully downloaded to ' + DOWNLOAD_DIR);</span>
+<span class="cstat-no" title="statement not covered" >        uncompressFile(file_name);</span>
+      });
+    });
+  };
+&nbsp;
+  // triggering functions
+<span class="cstat-no" title="statement not covered" >  downloadFile(download_url);</span>
+&nbsp;
+});
+&nbsp;
+// ADDING API ROUTES
+// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+// load from config.json
+// QUESTION: how to load local json file with server.js (config.json)
+<span class="cstat-no" title="statement not covered" >router.get('/api', <span class="fstat-no" title="function not covered" >function(req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >  res.json({</span>
+    help: "Prototype of an analytical API for the analysis of high frequency humanitarian information.",
+    version_name: config.version_name,
+    version: config.version,
+    repository: 'https://github.com/luiscape/xanadu-app',
+    base_query: {
+      locations: "api/locations"
+    }
+  });
+});
+&nbsp;
+// metadata for locations
+<span class="cstat-no" title="statement not covered" >router.route('/api/locations/adm0')</span>
+  .get(
+<span class="fstat-no" title="function not covered" >    function(req, res) {</span>
+<span class="cstat-no" title="statement not covered" >      Locations.count({</span>
+          'properties.ADM0_CODE': {
+            $exists: true
+          },
+          'properties.ADM1_CODE': {
+            $exists: false
+          }
+        },
+<span class="fstat-no" title="function not covered" >        function(err, total) {</span>
+<span class="cstat-no" title="statement not covered" >          Locations.find({</span>
+              'properties.ADM0_CODE': {
+                $exists: true
+              },
+              'properties.ADM1_CODE': {
+                $exists: false
+              }
+            }, {
+              'properties.ADM0_CODE': 1,
+              'properties.ADM0_NAME': 1
+            },
+<span class="fstat-no" title="function not covered" >            function(err, values) {</span>
+<span class="cstat-no" title="statement not covered" >              if (err) <span class="cstat-no" title="statement not covered" >console.log("You've got an error counting my friend");</span></span>
+              else <span class="cstat-no" title="statement not covered" >res.json({</span>
+                success: true,
+                help: "Returning the metadata for the Admin 0 administrative boundaries.",
+                count: total,
+                locations: values
+              });
+            });
+&nbsp;
+        });
+    });
+&nbsp;
+&nbsp;
+// debugging locations
+<span class="cstat-no" title="statement not covered" >router.route('/api/locations').get(</span>
+<span class="fstat-no" title="function not covered" >  function(req, res) {</span>
+<span class="cstat-no" title="statement not covered" >    Locations.count({}, <span class="fstat-no" title="function not covered" >function(err, total) {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (err) <span class="cstat-no" title="statement not covered" >console.log("You've got an error counting my friend");</span></span>
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (req.param("ADM0_CODE") &amp;&amp; req.param("ADM1_CODE") &amp;&amp; req.param("ADM2_CODE")) {</span>
+<span class="cstat-no" title="statement not covered" >        Locations.find({</span>
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': req.param("ADM1_CODE"),
+          'properties.ADM2_CODE': req.param("ADM2_CODE")
+        }, <span class="fstat-no" title="function not covered" >function(err, values) {</span>
+<span class="cstat-no" title="statement not covered" >          Locations.count({</span>
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': req.param("ADM1_CODE"),
+            'properties.ADM2_CODE': req.param("ADM2_CODE")
+          }, <span class="fstat-no" title="function not covered" >function(err, total) {</span>;
+<span class="cstat-no" title="statement not covered" >            if (err) <span class="cstat-no" title="statement not covered" >console.log("You've got an error counting my friend");</span></span>
+            else <span class="cstat-no" title="statement not covered" >res.json({</span>
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else <span class="cstat-no" title="statement not covered" >if (req.param("ADM0_CODE") &amp;&amp; req.param("ADM1_CODE")) {</span>
+<span class="cstat-no" title="statement not covered" >        Locations.find({</span>
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': req.param("ADM1_CODE"),
+          'properties.ADM2_CODE': {
+            $exists: false
+          }
+        }, <span class="fstat-no" title="function not covered" >function(err, values) {</span>
+<span class="cstat-no" title="statement not covered" >          Locations.count({</span>
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': req.param("ADM1_CODE"),
+            'properties.ADM2_CODE': {
+              $exists: false
+            }
+          }, <span class="fstat-no" title="function not covered" >function(err, total) {</span>;
+<span class="cstat-no" title="statement not covered" >            if (err) <span class="cstat-no" title="statement not covered" >console.log("You've got an error counting my friend");</span></span>
+            else <span class="cstat-no" title="statement not covered" >res.json({</span>
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else <span class="cstat-no" title="statement not covered" >if (req.param("ADM2_CODE")) {</span>
+<span class="cstat-no" title="statement not covered" >        Locations.find({</span>
+          'properties.ADM2_CODE': req.param("ADM2_CODE")
+        }, <span class="fstat-no" title="function not covered" >function(err, values) {</span>
+<span class="cstat-no" title="statement not covered" >          Locations.count({</span>
+            'properties.ADM2_CODE': req.param("ADM2_CODE")
+          }, <span class="fstat-no" title="function not covered" >function(err, total) {</span>;
+<span class="cstat-no" title="statement not covered" >            if (err) <span class="cstat-no" title="statement not covered" >console.log("You've got an error counting my friend");</span></span>
+            else <span class="cstat-no" title="statement not covered" >res.json({</span>
+              success: true,
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else <span class="cstat-no" title="statement not covered" >if (req.param("ADM1_CODE")) {</span>
+<span class="cstat-no" title="statement not covered" >        Locations.find({</span>
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': {
+            $exists: false
+          },
+          'properties.ADM2_CODE': {
+            $exists: false
+          }
+        }, <span class="fstat-no" title="function not covered" >function(err, values) {</span>
+<span class="cstat-no" title="statement not covered" >          Locations.count({</span>
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': {
+              $exists: false
+            },
+            'properties.ADM2_CODE': {
+              $exists: false
+            }
+          }, <span class="fstat-no" title="function not covered" >function(err, total) {</span>;
+<span class="cstat-no" title="statement not covered" >            if (err) <span class="cstat-no" title="statement not covered" >console.log("You've got an error counting my friend");</span></span>
+            else <span class="cstat-no" title="statement not covered" >res.json({</span>
+              success: true,
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else <span class="cstat-no" title="statement not covered" >if (req.param("ADM0_CODE")) {</span>
+<span class="cstat-no" title="statement not covered" >        Locations.find({</span>
+          'properties.ADM0_CODE': req.param("ADM0_CODE"),
+          'properties.ADM1_CODE': {
+            $exists: false
+          },
+          'properties.ADM2_CODE': {
+            $exists: false
+          }
+        }, <span class="fstat-no" title="function not covered" >function(err, values) {</span>
+<span class="cstat-no" title="statement not covered" >          Locations.count({</span>
+            'properties.ADM0_CODE': req.param("ADM0_CODE"),
+            'properties.ADM1_CODE': {
+              $exists: false
+            },
+            'properties.ADM2_CODE': {
+              $exists: false
+            }
+          }, <span class="fstat-no" title="function not covered" >function(err, total) {</span>;
+<span class="cstat-no" title="statement not covered" >            if (err) <span class="cstat-no" title="statement not covered" >console.log("You've got an error counting my friend");</span></span>
+            else <span class="cstat-no" title="statement not covered" >res.json({</span>
+              success: true,
+              help: "Queried location",
+              count: total,
+              locations: values
+            });
+          });
+        });
+      } else <span class="cstat-no" title="statement not covered" >res.json({</span>
+        help: "Result of entities found.",
+        count: total
+      });
+    });
+  });
+&nbsp;
+// =================== //
+// REGISTER OUR ROUTES //
+// =================== //
+// All routes will be prefixed with `/api`
+<span class="cstat-no" title="statement not covered" >app.use('/', router);</span>
+&nbsp;
+// ================ //
+// START THE SERVER //
+// ================ //
+<span class="cstat-no" title="statement not covered" >app.listen(port, server_ip_address, <span class="fstat-no" title="function not covered" >function() {</span></span>
+&nbsp;
+  // General server information
+<span class="cstat-no" title="statement not covered" >  version = config.version;</span>
+<span class="cstat-no" title="statement not covered" >  version_name = config.version_name;</span>
+<span class="cstat-no" title="statement not covered" >  github = config.github;</span>
+<span class="cstat-no" title="statement not covered" >  console.log('\n');</span>
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.blue.underline.bold('SERVER INFORMATION:'));</span>
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.yellow('Version: ') + version + " " + chalk.red(version_name));</span>
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.yellow('GitHub URL: ') + config.github);</span>
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.yellow('Author: ') + chalk.green(config.author));</span>
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.yellow('MongoDB connection: ') + mongodb_connection_string);</span>
+  // console.log(chalk.tellow('Connection: ') + );
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.yellow('Port: ') + port);</span>
+&nbsp;
+  // Start logging below
+<span class="cstat-no" title="statement not covered" >  console.log('\n');</span>
+<span class="cstat-no" title="statement not covered" >  console.log(chalk.red.underline.bold('LOG:'));</span>
+});
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 16 2015 22:03:34 GMT-0400 (EDT)</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

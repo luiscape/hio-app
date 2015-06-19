@@ -1,0 +1,22 @@
+sudo: required
+language: node_js
+node_js:
+  - "0.12"
+  - "0.11"
+  - "0.10"
+
+install:
+ - npm install
+ - npm install istanbul
+
+# run tests + coverage
+script:
+  - ./test.sh
+
+# send coverage report to coveralls.io
+after_success:
+  - coveralls
+
+# email notifications
+notifications:
+    email: false

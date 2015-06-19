@@ -21,10 +21,11 @@ var methodOverride = require('method-override');
 var parsecsv = require('csv-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
+var r = require('rethinkdb');
 
 // Loading configuration
-var c = require('./config/loadconfig');
-var config = c.loadConfig("dev.json");
+var c = require('./config/LoadConfig');
+var config = c.LoadConfig("dev.json");
 
 
 //===============================//
@@ -58,23 +59,12 @@ if (process.env.OPENSHIFT_NODEJS_PORT) { // for remote
   var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 }
 
-// database connections.
-// the first variables determine the
-// local parameters to use.
-mongodb_connection_string = config.database.connection + config.database.name;
-
-// the second determine what paramenters
-// to use when deployed to openshift.
-// it uses a series of global variables
-// specific to openshift.
-if (process.env.OPENSHIFT_MONGODB_DB_HOST) {
-  mongodb_connection_string = 'mongodb://' +
-    process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-    process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-    process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-    parseInt(process.env.OPENSHIFT_MONGODB_DB_PORT) + '/' +
-    config.database.name;
-}
+// connect to rethinkdb
+var connection = null;
+r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {
+    if (err) throw err;
+    connection = conn;
+})
 
 // effectivelly connecting to mongodb
 // improve function:

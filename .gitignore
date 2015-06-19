@@ -1,1 +1,4 @@
-dbinfo.txt
+node_modules/*
+node_modules/**
+rethink_data/*
+rethink_data/**s
